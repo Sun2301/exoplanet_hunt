@@ -4,7 +4,7 @@
 */
 
 // --- 1. CONFIGURATION & STATE ---
-const API_URL = 'http://127.0.0.1:8000/predict';
+const API_URL = 'https://exoplanet-hunt-api.onrender.com';
 //const API_URL = 'predict.php';
 // Pre-defined star systems data to send to the backend.
 const STAR_SYSTEMS = {
@@ -648,7 +648,7 @@ document.addEventListener('DOMContentLoaded', () => {
       formData.append('file', file);
 
       try {
-        const response = await fetch('http://localhost:8000/predict-csv', {
+        const response = await fetch('https://exoplanet-hunt-api.onrender.com', {
           method: 'POST',
           body: formData
         });
