@@ -640,7 +640,7 @@ document.addEventListener('DOMContentLoaded', () => {
     csvForm.addEventListener('submit', async function(e) {
       e.preventDefault();
       if (!csvFileInput.files.length) {
-        alert('Sélectionne un fichier CSV.');
+        alert('Please select a CSV file.');
         return;
       }
       const file = csvFileInput.files[0];
@@ -653,12 +653,12 @@ document.addEventListener('DOMContentLoaded', () => {
           body: formData
         });
         if (!response.ok) {
-          throw new Error('Erreur serveur');
+          throw new Error('Server error');
         }
         const result = await response.json();
         csvResult.textContent = JSON.stringify(result, null, 2);
       } catch (err) {
-        csvResult.textContent = 'Erreur : ' + err.message;
+        csvResult.textContent = 'Error: ' + err.message;
       }
     });
   }

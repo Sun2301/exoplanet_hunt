@@ -1,7 +1,7 @@
 """
-FastAPI Backend pour la Détection d'Exoplanètes
+FastAPI Backend for Exoplanet Detection
 ================================================
-Version optimisée pour ton modèle ML avec pickle.
+Optimized version with ML model using pickle.
 """
 
 from fastapi import FastAPI, HTTPException
@@ -16,17 +16,15 @@ import os
 import random
 from joblib import load
 
-# ====================================================================
-# 1️⃣ CHEMINS ET CHARGEMENT DES OBJETS PICKLE
-# ====================================================================
+
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 models_dir = os.path.join(os.path.dirname(current_dir), "models")
 
-# Créer le dossier models s'il n'existe pas
+# Create models directory if it doesn't exist
 if not os.path.exists(models_dir):
     os.makedirs(models_dir)
-    print("✨ Dossier models créé")
+    print("✨ Models directory created")
 
 try:
     with open(os.path.join(models_dir, "exoplanet_model_vf.pkl"), "rb") as f:
@@ -38,10 +36,10 @@ try:
 
     features = metadata["feature_names"]
     label_classes = metadata["classes"]
-    print("✅ Modèle, scaler et métadonnées chargés avec succès")
+    print("✅ Model, scaler, and metadata loaded successfully")
 
 except Exception as e:
-    print(f"❌ Erreur lors du chargement des fichiers pickle: {e}")
+    print(f"❌ Error loading pickle files: {e}")
     model = None
     scaler = None
     features = []
@@ -49,32 +47,32 @@ except Exception as e:
 
 try:
     label_encoder = load(os.path.join(models_dir, "label_encoder_vf.pkl"))
-    print("✅ LabelEncoder chargé avec succès")
+    print("✅ LabelEncoder loaded successfully")
 except Exception as e:
-    print(f"❌ Erreur lors du chargement du LabelEncoder: {e}")
+    print(f"❌ Error loading LabelEncoder: {e}")
     label_encoder = None
 
-# ====================================================================
-# 2️⃣ CONFIGURATION DE L'API
-# ====================================================================
+
+
+
 
 app = FastAPI(
     title="Exoplanet Classifier API",
     description="API pour classifier des exoplanètes avec Random Forest",
     version="1.0.0"
 )
-
-# Autoriser le front-end (CORS)
+# Allow frontend access (CORS)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["*"],  # Allow all origins for now
+    allow_credentials=True,
     allow_methods=["*"],
-    allow_headers=["*"]
+    allow_headers=["*"],
 )
 
-# ====================================================================
-# 3️⃣ MODÈLES PYDANTIC
-# ====================================================================
+
+
+
 
 class PlanetFeatures(BaseModel):
     ra: float
@@ -102,12 +100,9 @@ class ExoplanetPrediction(BaseModel):
     confidence: float
     confidence_percent: str
 
-# ====================================================================
-# 4️⃣ FONCTIONS UTILES
-# ====================================================================
 
 def generate_light_curve(features: PlanetFeatures) -> List[float]:
-    """Génère une courbe de lumière réaliste avec transit."""
+    """Generates a realistic light curve with transit."""
     num_points = 100
     light_curve = []
     transit_depth = min((features.koi_prad / max(features.koi_srad, 0.1)) ** 2, 0.05)
@@ -133,7 +128,7 @@ def generate_light_curve(features: PlanetFeatures) -> List[float]:
 
 
 def calculate_habitability(features: PlanetFeatures) -> float:
-    """Calcule un score d'habitabilité réaliste basé sur les features."""
+    """Calculates a realistic habitability score based on the features."""
     score = 0.0
     if 0.8 <= features.koi_prad <= 1.5:
         score += 0.3
@@ -159,7 +154,7 @@ def calculate_habitability(features: PlanetFeatures) -> float:
 
 
 def generate_planet_name(features: PlanetFeatures, prediction: str) -> str:
-    """Génère un nom de planète réaliste basé sur RA/DEC et prédiction."""
+    """Generates a realistic planet name based on RA/DEC and prediction."""
     ra, dec = features.ra, features.dec
     if 340 <= ra <= 350 and -10 <= dec <= 0:
         suffix = random.choice(['b', 'c', 'd', 'e', 'f', 'g', 'h'])
@@ -175,13 +170,13 @@ def generate_planet_name(features: PlanetFeatures, prediction: str) -> str:
 
 
 def calculate_distance(features: PlanetFeatures) -> float:
-    """Distance réaliste basée sur le rayon stellaire."""
+    """Realistic distance based on stellar radius."""
     base = 200 if features.koi_srad < 1 else 1000
     return round(base * random.uniform(0.85, 1.15), 1)
 
 
 def get_prediction_confidence(model, X_scaled) -> float:
-    """Obtient la confiance de la prédiction."""
+    """Gets the prediction confidence score."""
     try:
         if hasattr(model, 'predict_proba'):
             proba = model.predict_proba(X_scaled)
@@ -191,9 +186,6 @@ def get_prediction_confidence(model, X_scaled) -> float:
     except:
         return 0.85
 
-# ====================================================================
-# 5️⃣ ENDPOINTS
-# ====================================================================
 
 @app.get("/")
 async def root():
@@ -278,23 +270,23 @@ async def predict(data: PlanetFeatures):
 
 @app.post("/predict-csv")
 async def predict_csv(file: UploadFile = File(...)):
-    print("Début traitement CSV")
-    # Vérifier que le modèle et le scaler sont chargés
+    print("Starting CSV processing")
+    # Check if model and scaler are loaded
     if model is None or scaler is None or not features:
-        raise HTTPException(status_code=500, detail="Modèle, scaler ou métadonnées non chargés")
+        raise HTTPException(status_code=500, detail="Model, scaler or metadata not loaded")
 
     # Lire le CSV
     try:
         df = pd.read_csv(file.file, sep=",", comment="#")
     except Exception as e:
-        print("Erreur lors de la lecture du CSV :", e)
-        raise HTTPException(status_code=400, detail=f"Impossible de lire le CSV: {e}")
+        print("Error reading CSV:", e)
+        raise HTTPException(status_code=400, detail=f"Unable to read CSV: {e}")
 
     # Colonnes attendues (ordre exact)
     expected_features = list(features)
     present = [c for c in expected_features if c in df.columns]
     if len(present) == 0:
-        raise HTTPException(status_code=422, detail="Aucune des colonnes attendues présentes dans le CSV")
+        raise HTTPException(status_code=422, detail="None of the expected columns found in CSV")
 
     # Ne garder que les colonnes d'entraînement présentes
     X = df[[c for c in expected_features if c in df.columns]].copy()
