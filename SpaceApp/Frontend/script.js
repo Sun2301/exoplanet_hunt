@@ -4,7 +4,7 @@
 */
 
 // --- 1. CONFIGURATION & STATE ---
-const API_URL = 'https://exoplanet-hunt-api.onrender.com:8000/predict';
+const API_URL = 'https://exoplanet-hunt-api.onrender.com:10000/predict';
 //const API_URL = 'predict.php';
 // Pre-defined star systems data to send to the backend.
 const STAR_SYSTEMS = {
@@ -577,6 +577,7 @@ async function handleHuntButtonClick() {
     const requestData = STAR_SYSTEMS[selectedSystemKey];
 
 
+    console.log(requestData);
     try {
         // 3. Call the API
         const response = await fetch(API_URL, {
