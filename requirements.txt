@@ -1,0 +1,21 @@
+# Core ML and Data Processing
+scikit-learn>=1.0.2    # For Random Forest Classifier
+pandas>=1.4.0          # For data manipulation
+numpy>=1.21.0          # For numerical operations
+
+# Web Interface
+streamlit>=1.24.0      # For web application
+
+# Visualization
+matplotlib>=3.5.0      # For basic plotting
+plotly>=5.13.0        # For interactive visualizations
+seaborn>=0.11.2       # For enhanced visualizations
+
+# Data Format Support
+openpyxl>=3.0.9       # For Excel file support
+xlrd>=2.0.1           # For legacy Excel support
+
+# Optional but recommended
+jupyter>=1.0.0        # For notebook development
+black>=22.3.0         # For code formatting
+pytest>=7.0.0         # For testing

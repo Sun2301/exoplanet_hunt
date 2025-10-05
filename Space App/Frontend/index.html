@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Echo Lens - ΦGrid Protocol</title>
+    
+    <!-- Google Fonts: Exo 2 & Orbitron -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;700&family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
+    
+    <!-- Chart.js Library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Particles.js for Living Background -->
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+
+    <!-- Mission Stylesheet V3 -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    
+    <!-- V3: Living Background Canvas -->
+    <div id="particles-js"></div>
+
+    <!-- V3: Scanline Overlay -->
+    <div class="scanline-overlay"></div>
+
+    <header class="mission-header">
+        <div class="mission-logo-v3">ECHO LENS</div>
+        <div class="mission-status">Kelsey // MISSION STATUS: <span id="mission-status-text">STANDBY</span></div>
+    </header>
+
+    <main class="container">
+        <!-- Panel 1 -->
+        <div class="panel">
+            <h2 class="panel__title">1. Target Selection</h2>
+            <div class="panel__content">
+                <label for="star-system" class="form-label">Select star system:</label>
+                <select id="star-system" class="form-select"></select>
+                <button class="cta-button" id="launch-button">
+                    <span class="cta-button__text">Hunt for Echoes</span>
+                </button>
+            </div>
+            <div class="fun-fact-container">
+                <h3 class="fun-fact__title">Did you know?</h3>
+                <p class="fun-fact__text" id="fun-fact-text"></p>
+            </div>
+        </div>
+
+        <!-- Panel 1B: UPLOAD CSV -->
+        <div class="panel">
+            <h2 class="panel__title">Upload CSV for Batch Prediction</h2>
+            <form id="csvForm">
+                <input type="file" id="csvFile" accept=".csv" />
+                <button type="submit" class="cta-button">
+                    <span class="cta-button__text">Envoyer</span>
+                </button>
+            </form>
+            <pre id="csv-result"></pre>
+        </div>
+
+        <!-- Panel 2 -->
+        <div class="panel panel--central">
+            <h2 class="panel__title">2. Deep Space Observatory</h2>
+            <div class="panel__content">
+                <canvas id="lightCurveChart"></canvas>
+                <div class="placeholder-text" id="central-placeholder">Awaiting target selection...</div>
+            </div>
+        </div>
+
+        <!-- Panel 3 -->
+        <div class="panel">
+            <h2 class="panel__title">3. Candidate Profile</h2>
+            <div class="panel__content">
+                 <div class="placeholder-text placeholder-text--hidden" id="no-results-text">No conclusive echo found.</div>
+                 <div class="results-card hidden" id="results-card">
+                    <div class="result__header">
+                        <h3 class="result__name" id="result-name">--</h3>
+                        <div class="result__prediction" id="result-prediction">--</div>
+                    </div>
+                    <div class="result-item"><span class="result-item__label">Distance</span><span class="result-item__value" id="result-distance">--</span></div>
+                    <div class="result-item"><span class="result-item__label">Period (Year)</span><span class="result-item__value" id="result-period">--</span></div>
+                    <div class="result-item"><span class="result-item__label">Size</span><span class="result-item__value" id="result-size">--</span></div>
+                    <div class="gauge-container"><span class="result-item__label">Habitability Index</span><div class="gauge-bar"><div class="gauge-bar__fill" id="habitability-gauge"></div></div></div>
+                    <div class="confidence-container"><span class="result-item__label">Prediction Confidence</span><div class="dots-container" id="confidence-dots"></div></div>
+                 </div>
+            </div>
+        </div>
+    </main>
+    
+    <footer class="mission-footer">
+        &copy; 2025 ΦGrid Team - NASA Space Apps Challenge // Data processed by The PhiGrid Protocol
+    </footer>
+    
+    <!-- Mission Script V3 -->
+    <script src="script.js"></script>
+</body>
+</html>
