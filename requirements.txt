@@ -1,21 +1,24 @@
-# Core ML and Data Processing
-scikit-learn>=1.0.2    # For Random Forest Classifier
-pandas>=1.4.0          # For data manipulation
-numpy>=1.21.0          # For numerical operations
+# Core Dependencies
+streamlit>=1.28.0     # Web application framework
+fastapi>=0.104.0      # Backend API framework
+uvicorn>=0.24.0      # ASGI server for FastAPI
+scikit-learn>=1.0.2   # Machine Learning (Random Forest Classifier)
+pandas>=1.4.0         # Data manipulation and analysis
+numpy>=1.21.0         # Numerical computations
+python-multipart>=0.0.6 # For handling file uploads in FastAPI
 
-# Web Interface
-streamlit>=1.24.0      # For web application
+# Data Visualization
+plotly>=5.13.0        # Interactive visualizations for web interface
+matplotlib>=3.5.0     # Static visualizations and plots
 
-# Visualization
-matplotlib>=3.5.0      # For basic plotting
-plotly>=5.13.0        # For interactive visualizations
-seaborn>=0.11.2       # For enhanced visualizations
+# Data Processing
+scipy>=1.7.0          # Scientific computing (used by scikit-learn)
 
-# Data Format Support
-openpyxl>=3.0.9       # For Excel file support
-xlrd>=2.0.1           # For legacy Excel support
+# Development Tools
+pytest>=7.0.0         # Unit testing
+black>=22.3.0         # Code formatting
+pylint>=2.17.0        # Code quality checks
 
-# Optional but recommended
-jupyter>=1.0.0        # For notebook development
-black>=22.3.0         # For code formatting
-pytest>=7.0.0         # For testing
+# Documentation
+mkdocs>=1.5.0         # Documentation generation
+mkdocs-material>=9.0.0 # Documentation theme

@@ -21,14 +21,19 @@ from joblib import load
 # ====================================================================
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
-root_dir = os.path.dirname(current_dir)
+models_dir = os.path.join(os.path.dirname(current_dir), "models")
+
+# Créer le dossier models s'il n'existe pas
+if not os.path.exists(models_dir):
+    os.makedirs(models_dir)
+    print("✨ Dossier models créé")
 
 try:
-    with open(os.path.join(root_dir, "exoplanet_model_vf.pkl"), "rb") as f:
+    with open(os.path.join(models_dir, "exoplanet_model_vf.pkl"), "rb") as f:
         model = pickle.load(f)
-    with open(os.path.join(root_dir, "exoplanet_scaler_vf.pkl"), "rb") as f:
+    with open(os.path.join(models_dir, "exoplanet_scaler_vf.pkl"), "rb") as f:
         scaler = pickle.load(f)
-    with open(os.path.join(root_dir, "model_metadata.pkl"), "rb") as f:
+    with open(os.path.join(models_dir, "model_metadata.pkl"), "rb") as f:
         metadata = pickle.load(f)
 
     features = metadata["feature_names"]
@@ -43,7 +48,7 @@ except Exception as e:
     label_classes = []
 
 try:
-    label_encoder = load(os.path.join(root_dir, "label_encoder_vf.pkl"))
+    label_encoder = load(os.path.join(models_dir, "label_encoder_vf.pkl"))
     print("✅ LabelEncoder chargé avec succès")
 except Exception as e:
     print(f"❌ Erreur lors du chargement du LabelEncoder: {e}")
